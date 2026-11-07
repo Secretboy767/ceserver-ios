@@ -136,7 +136,7 @@
         return NO;
     }
 
-    if (![baseName hasSuffix:@".js"]) {
+    if (![baseName.pathExtension.lowercaseString isEqualToString:@"js"]) {
         return NO;
     }
 

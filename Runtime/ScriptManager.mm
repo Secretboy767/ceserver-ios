@@ -125,7 +125,7 @@
 
     NSMutableArray<NSString *> *scriptNames = [NSMutableArray array];
     for (NSString *entry in directoryEntries) {
-        if (![entry hasSuffix:@".js"]) {
+        if (![entry.pathExtension.lowercaseString isEqualToString:@"js"]) {
             continue;
         }
 

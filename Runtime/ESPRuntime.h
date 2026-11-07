@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) JSContext *javascriptContext;
 @property (nonatomic, copy, readonly) NSString *documentsDirectory;
 @property (nonatomic, assign, readonly) BOOL isRunning;
+@property (nonatomic, copy, readonly) NSArray<NSString *> *terminalErrorMessages;
 
 + (instancetype)sharedRuntime;
 - (instancetype)initWithApplicationRoot:(NSString *)applicationRoot NS_DESIGNATED_INITIALIZER;
