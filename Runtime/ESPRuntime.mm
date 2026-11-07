@@ -14,11 +14,24 @@
 @property (nonatomic, assign, readwrite) BOOL isRunning;
 @property (nonatomic, strong) UIButton *createFolderButton;
 @property (nonatomic, copy) void (^createFolderCompletion)(NSError * _Nullable error);
+@property (nonatomic, assign) BOOL observingWindowAvailability;
 - (BOOL)prepareRuntimeWithError:(NSError **)error;
+- (void)installCreateButton;
+- (void)runtimeWindowDidBecomeAvailable:(NSNotification *)notification;
+- (UIWindow *)activeKeyWindow;
 - (void)createScriptsDirectory:(UIButton *)sender;
 @end
 
 @implementation ESPRuntime
+
++ (void)load {
+    if (self == [ESPRuntime class]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ESPRuntime *runtime = [self sharedRuntime];
+            [runtime installCreateButton];
+        });
+    }
+}
 
 + (instancetype)sharedRuntime {
     static ESPRuntime *sharedInstance = nil;
@@ -182,6 +195,64 @@
 
 - (NSArray<NSDictionary *> *)lastExecutionLogs {
     return [[Logger sharedLogger] entries];
+}
+
+- (void)installCreateButton {
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+
+        UIWindow *window = [strongSelf activeKeyWindow];
+        if (window.rootViewController != nil) {
+            [strongSelf showCreateButtonInView:window.rootViewController.view completion:nil];
+            if (strongSelf.observingWindowAvailability) {
+                [NSNotificationCenter.defaultCenter removeObserver:strongSelf
+                                                              name:UIApplicationDidBecomeActiveNotification
+                                                            object:nil];
+                [NSNotificationCenter.defaultCenter removeObserver:strongSelf
+                                                              name:UIWindowDidBecomeKeyNotification
+                                                            object:nil];
+                strongSelf.observingWindowAvailability = NO;
+            }
+            return;
+        }
+
+        if (!strongSelf.observingWindowAvailability) {
+            [NSNotificationCenter.defaultCenter addObserver:strongSelf
+                                                   selector:@selector(runtimeWindowDidBecomeAvailable:)
+                                                       name:UIApplicationDidBecomeActiveNotification
+                                                     object:nil];
+            [NSNotificationCenter.defaultCenter addObserver:strongSelf
+                                                   selector:@selector(runtimeWindowDidBecomeAvailable:)
+                                                       name:UIWindowDidBecomeKeyNotification
+                                                     object:nil];
+            strongSelf.observingWindowAvailability = YES;
+        }
+    });
+}
+
+- (void)runtimeWindowDidBecomeAvailable:(__unused NSNotification *)notification {
+    [self installCreateButton];
+}
+
+- (UIWindow *)activeKeyWindow {
+    for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
+        if (![scene isKindOfClass:[UIWindowScene class]] ||
+            scene.activationState != UISceneActivationStateForegroundActive) {
+            continue;
+        }
+
+        for (UIWindow *window in ((UIWindowScene *)scene).windows) {
+            if (window.isKeyWindow) {
+                return window;
+            }
+        }
+    }
+
+    return UIApplication.sharedApplication.keyWindow;
 }
 
 - (void)showCreateButtonInViewController:(UIViewController *)viewController
