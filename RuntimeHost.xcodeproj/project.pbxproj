@@ -1,0 +1,208 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+		000000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 000000000000000000000002 /* Build configuration list for PBXProject */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base);
+			mainGroup = 000000000000000000000003;
+			productRefGroup = 000000000000000000000004;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (000000000000000000000005 /* RuntimeHost */);
+		};
+		000000000000000000000005 /* RuntimeHost */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000000000006 /* Build configuration list for PBXNativeTarget */;
+			buildPhases = (
+				000000000000000000000007 /* Sources */,
+				000000000000000000000008 /* Frameworks */,
+				000000000000000000000009 /* Resources */,
+			);
+			buildRules = ();
+			dependencies = ();
+			name = RuntimeHost;
+			productName = RuntimeHost;
+			productReference = 00000000000000000000000A /* RuntimeHost.app */;
+			productType = "com.apple.product-type.application";
+		};
+		000000000000000000000003 /* Main Group */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000000B /* HostApp */,
+				00000000000000000000000C /* Runtime */,
+				00000000000000000000000D /* Frameworks */,
+				000000000000000000000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		00000000000000000000000B /* HostApp */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000000E /* AppDelegate.h */,
+				00000000000000000000000F /* AppDelegate.mm */,
+				000000000000000000000010 /* main.m */,
+				000000000000000000000011 /* Info.plist */,
+			);
+			path = HostApp;
+			sourceTree = "<group>";
+		};
+		00000000000000000000000C /* Runtime */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000012 /* ESPRuntime.h */,
+				000000000000000000000013 /* ESPRuntime.mm */,
+				000000000000000000000014 /* Logger.h */,
+				000000000000000000000015 /* Logger.mm */,
+				000000000000000000000016 /* ScriptManager.h */,
+				000000000000000000000017 /* ScriptManager.mm */,
+				000000000000000000000018 /* ScriptValidator.h */,
+				000000000000000000000019 /* ScriptValidator.mm */,
+			);
+			path = Runtime;
+			sourceTree = "<group>";
+		};
+		00000000000000000000000D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000001A /* Foundation.framework */,
+				00000000000000000000001B /* UIKit.framework */,
+				00000000000000000000001C /* JavaScriptCore.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		000000000000000000000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (00000000000000000000000A /* RuntimeHost.app */);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		00000000000000000000000A /* RuntimeHost.app */ = {
+			isa = PBXFileReference;
+			explicitFileType = wrapper.application;
+			includeInIndex = 0;
+			path = RuntimeHost.app;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00000000000000000000000E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>";};
+		00000000000000000000000F /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>";};
+		000000000000000000000010 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>";};
+		000000000000000000000011 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>";};
+		000000000000000000000012 /* ESPRuntime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ESPRuntime.h; sourceTree = "<group>";};
+		000000000000000000000013 /* ESPRuntime.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ESPRuntime.mm; sourceTree = "<group>";};
+		000000000000000000000014 /* Logger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>";};
+		000000000000000000000015 /* Logger.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Logger.mm; sourceTree = "<group>";};
+		000000000000000000000016 /* ScriptManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScriptManager.h; sourceTree = "<group>";};
+		000000000000000000000017 /* ScriptManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ScriptManager.mm; sourceTree = "<group>";};
+		000000000000000000000018 /* ScriptValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScriptValidator.h; sourceTree = "<group>";};
+		000000000000000000000019 /* ScriptValidator.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ScriptValidator.mm; sourceTree = "<group>";};
+		00000000000000001A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT;};
+		00000000000000001B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT;};
+		00000000000000001C /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT;};
+		00000000000000001D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000010 /* main.m */;};
+		00000000000000001E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000F /* AppDelegate.mm */;};
+		00000000000000001F /* ESPRuntime.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000013 /* ESPRuntime.mm */;};
+		000000000000000020 /* Logger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000015 /* Logger.mm */;};
+		000000000000000021 /* ScriptManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000017 /* ScriptManager.mm */;};
+		000000000000000022 /* ScriptValidator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000019 /* ScriptValidator.mm */;};
+		000000000000000023 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00000000000000001A /* Foundation.framework */;};
+		000000000000000024 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00000000000000001B /* UIKit.framework */;};
+		000000000000000025 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00000000000000001C /* JavaScriptCore.framework */;};
+		000000000000000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000000000000001D /* main.m in Sources */,
+				00000000000000001E /* AppDelegate.mm in Sources */,
+				00000000000000001F /* ESPRuntime.mm in Sources */,
+				000000000000000020 /* Logger.mm in Sources */,
+				000000000000000021 /* ScriptManager.mm in Sources */,
+				000000000000000022 /* ScriptValidator.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000008 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000023 /* Foundation.framework in Frameworks */,
+				000000000000000024 /* UIKit.framework in Frameworks */,
+				000000000000000025 /* JavaScriptCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000009 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;};
+		000000000000000026 /* Project configuration list */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000027 /* Debug */,
+				000000000000000028 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		000000000000000006 /* Target configuration list */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000029 /* Debug */,
+				00000000000000002A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		000000000000000027 /* Project Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; SDKROOT = iphoneos;};
+			name = Debug;
+		};
+		000000000000000028 /* Project Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; SDKROOT = iphoneos;};
+			name = Release;
+		};
+		000000000000000029 /* Target Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = NO;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Runtime";
+				INFOPLIST_FILE = HostApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.ESPRuntimeHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		00000000000000002A /* Target Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = NO;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Runtime";
+				INFOPLIST_FILE = HostApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.ESPRuntimeHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+	};
+	rootObject = 000000000000000000000001 /* Project object */;
+}
