@@ -12,14 +12,14 @@
 @property (nonatomic, strong, readwrite) JSContext *javascriptContext;
 @property (nonatomic, copy, readwrite) NSString *documentsDirectory;
 @property (nonatomic, assign, readwrite) BOOL isRunning;
-@property (nonatomic, strong) UIButton *createFolderButton;
-@property (nonatomic, copy) void (^createFolderCompletion)(NSError * _Nullable error);
+@property (nonatomic, strong) UIButton *runScriptsButton;
+@property (nonatomic, copy) void (^runScriptsCompletion)(NSError * _Nullable error);
 @property (nonatomic, assign) BOOL observingWindowAvailability;
 - (BOOL)prepareRuntimeWithError:(NSError **)error;
 - (void)installCreateButton;
 - (void)runtimeWindowDidBecomeAvailable:(NSNotification *)notification;
 - (UIWindow *)activeKeyWindow;
-- (void)createScriptsDirectory:(UIButton *)sender;
+- (void)runDocumentsScripts:(UIButton *)sender;
 @end
 
 @implementation ESPRuntime
@@ -47,8 +47,7 @@
     self = [super init];
     if (self) {
         _documentsDirectory = [applicationRoot copy] ?: [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
-        NSString *scriptsDirectory = [_documentsDirectory stringByAppendingPathComponent:@"scripts"];
-        _scriptManager = [[ScriptManager alloc] initWithBaseDirectory:scriptsDirectory];
+        _scriptManager = [[ScriptManager alloc] initWithBaseDirectory:_documentsDirectory];
         _isRunning = NO;
     }
     return self;
@@ -207,7 +206,7 @@
 
         UIWindow *window = [strongSelf activeKeyWindow];
         if (window.rootViewController != nil) {
-            [strongSelf showCreateButtonInView:window.rootViewController.view completion:nil];
+            [strongSelf showRunScriptsButtonInView:window.rootViewController.view completion:nil];
             if (strongSelf.observingWindowAvailability) {
                 [NSNotificationCenter.defaultCenter removeObserver:strongSelf
                                                               name:UIApplicationDidBecomeActiveNotification
@@ -255,38 +254,38 @@
     return UIApplication.sharedApplication.keyWindow;
 }
 
-- (void)showCreateButtonInViewController:(UIViewController *)viewController
-                              completion:(void (^)(NSError * _Nullable error))completion {
+- (void)showRunScriptsButtonInViewController:(UIViewController *)viewController
+                                  completion:(void (^)(NSError * _Nullable error))completion {
     if (![NSThread isMainThread]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self showCreateButtonInViewController:viewController completion:completion];
+            [self showRunScriptsButtonInViewController:viewController completion:completion];
         });
         return;
     }
 
-    [self showCreateButtonInView:viewController.view completion:completion];
+    [self showRunScriptsButtonInView:viewController.view completion:completion];
 }
 
-- (void)showCreateButtonInView:(UIView *)view
-                    completion:(void (^)(NSError * _Nullable error))completion {
+- (void)showRunScriptsButtonInView:(UIView *)view
+                        completion:(void (^)(NSError * _Nullable error))completion {
     if (![NSThread isMainThread]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self showCreateButtonInView:view completion:completion];
+            [self showRunScriptsButtonInView:view completion:completion];
         });
         return;
     }
 
-    [self.createFolderButton removeFromSuperview];
-    self.createFolderCompletion = [completion copy];
+    [self.runScriptsButton removeFromSuperview];
+    self.runScriptsCompletion = [completion copy];
 
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.translatesAutoresizingMaskIntoConstraints = NO;
-    [button setTitle:@"create" forState:UIControlStateNormal];
+    [button setTitle:@"Run" forState:UIControlStateNormal];
     [button setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     button.backgroundColor = UIColor.systemBlueColor;
     button.layer.cornerRadius = 8.0;
     [button addTarget:self
-               action:@selector(createScriptsDirectory:)
+               action:@selector(runDocumentsScripts:)
      forControlEvents:UIControlEventTouchUpInside];
 
     [view addSubview:button];
@@ -296,41 +295,29 @@
         [button.widthAnchor constraintEqualToConstant:72.0],
         [button.heightAnchor constraintEqualToConstant:36.0]
     ]];
-    self.createFolderButton = button;
+    self.runScriptsButton = button;
 }
 
-- (void)createScriptsDirectory:(UIButton *)sender {
+- (void)runDocumentsScripts:(UIButton *)sender {
     sender.enabled = NO;
 
     NSError *error = nil;
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *scriptsDirectory = self.scriptManager.baseDirectory;
-    BOOL created = [fileManager createDirectoryAtPath:scriptsDirectory
-                          withIntermediateDirectories:YES
-                                           attributes:nil
-                                                error:&error];
-    BOOL isDirectory = NO;
-    BOOL exists = [fileManager fileExistsAtPath:scriptsDirectory isDirectory:&isDirectory];
-    created = created || (exists && isDirectory);
-
-    if (!created) {
-        if (error == nil) {
-            error = [NSError errorWithDomain:NSCocoaErrorDomain
-                                        code:NSFileWriteUnknownError
-                                    userInfo:@{NSLocalizedDescriptionKey: @"The scripts folder could not be created."}];
-        }
-        NSLog(@"Unable to create scripts directory at %@: %@",
-              scriptsDirectory,
-              error.localizedDescription);
+    BOOL succeeded = [self reloadWithError:&error];
+    if (!succeeded) {
+        NSLog(@"Unable to execute JavaScript files in %@: %@",
+              self.documentsDirectory,
+              error.localizedDescription ?: @"Unknown error");
         [sender setTitle:@"Failed" forState:UIControlStateNormal];
+    } else if (self.scriptManager.scriptFiles.count == 0) {
+        [sender setTitle:@"No files" forState:UIControlStateNormal];
     } else {
-        [sender setTitle:@"Created" forState:UIControlStateNormal];
+        [sender setTitle:@"Ran" forState:UIControlStateNormal];
     }
 
-    void (^completion)(NSError *) = self.createFolderCompletion;
-    self.createFolderCompletion = nil;
+    void (^completion)(NSError *) = self.runScriptsCompletion;
+    self.runScriptsCompletion = nil;
     if (completion) {
-        completion(created ? nil : error);
+        completion(succeeded ? nil : error);
     }
 
     __weak ESPRuntime *weakSelf = self;
@@ -339,8 +326,8 @@
                    dispatch_get_main_queue(), ^{
         UIButton *button = weakButton;
         [button removeFromSuperview];
-        if (weakSelf.createFolderButton == button) {
-            weakSelf.createFolderButton = nil;
+        if (weakSelf.runScriptsButton == button) {
+            weakSelf.runScriptsButton = nil;
         }
     });
 }

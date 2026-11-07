@@ -16,14 +16,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedRuntime;
 - (instancetype)initWithApplicationRoot:(NSString *)applicationRoot NS_DESIGNATED_INITIALIZER;
-// Creates Documents/scripts under the application root and executes its discovered JavaScript files.
+// Executes top-level .js files in the application's Documents directory.
 - (BOOL)startWithError:(NSError **)error;
 - (BOOL)reloadWithError:(NSError **)error;
 - (BOOL)executeScripts:(NSArray<NSString *> *)scripts error:(NSError **)error;
-- (void)showCreateButtonInViewController:(UIViewController *)viewController
-                              completion:(void (^)(NSError * _Nullable error))completion;
-- (void)showCreateButtonInView:(UIView *)view
-                    completion:(void (^)(NSError * _Nullable error))completion;
+- (void)showRunScriptsButtonInViewController:(UIViewController *)viewController
+                                  completion:(void (^)(NSError * _Nullable error))completion;
+- (void)showRunScriptsButtonInView:(UIView *)view
+                        completion:(void (^)(NSError * _Nullable error))completion;
 - (NSArray<NSDictionary *> *)lastExecutionLogs;
 
 @end
