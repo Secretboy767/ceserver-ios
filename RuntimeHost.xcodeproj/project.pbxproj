@@ -107,71 +107,71 @@
 		000000000000000000000017 /* ScriptManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ScriptManager.mm; sourceTree = "<group>";};
 		000000000000000000000018 /* ScriptValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScriptValidator.h; sourceTree = "<group>";};
 		000000000000000000000019 /* ScriptValidator.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ScriptValidator.mm; sourceTree = "<group>";};
-		00000000000000001A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT;};
-		00000000000000001B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT;};
-		00000000000000001C /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT;};
-		00000000000000001D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000010 /* main.m */;};
-		00000000000000001E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000F /* AppDelegate.mm */;};
-		00000000000000001F /* ESPRuntime.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000013 /* ESPRuntime.mm */;};
-		000000000000000020 /* Logger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000015 /* Logger.mm */;};
-		000000000000000021 /* ScriptManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000017 /* ScriptManager.mm */;};
-		000000000000000022 /* ScriptValidator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000019 /* ScriptValidator.mm */;};
-		000000000000000023 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00000000000000001A /* Foundation.framework */;};
-		000000000000000024 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00000000000000001B /* UIKit.framework */;};
-		000000000000000025 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00000000000000001C /* JavaScriptCore.framework */;};
-		000000000000000007 /* Sources */ = {
+		00000000000000000000001A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT;};
+		00000000000000000000001B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT;};
+		00000000000000000000001C /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT;};
+		00000000000000000000001D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000010 /* main.m */;};
+		00000000000000000000001E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000F /* AppDelegate.mm */;};
+		00000000000000000000001F /* ESPRuntime.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000013 /* ESPRuntime.mm */;};
+		000000000000000000000020 /* Logger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000015 /* Logger.mm */;};
+		000000000000000000000021 /* ScriptManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000017 /* ScriptManager.mm */;};
+		000000000000000000000022 /* ScriptValidator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000019 /* ScriptValidator.mm */;};
+		000000000000000000000023 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001A /* Foundation.framework */;};
+		000000000000000000000024 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001B /* UIKit.framework */;};
+		000000000000000000000025 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001C /* JavaScriptCore.framework */;};
+		000000000000000000000007 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00000000000000001D /* main.m in Sources */,
-				00000000000000001E /* AppDelegate.mm in Sources */,
-				00000000000000001F /* ESPRuntime.mm in Sources */,
-				000000000000000020 /* Logger.mm in Sources */,
-				000000000000000021 /* ScriptManager.mm in Sources */,
-				000000000000000022 /* ScriptValidator.mm in Sources */,
+				00000000000000000000001D /* main.m in Sources */,
+				00000000000000000000001E /* AppDelegate.mm in Sources */,
+				00000000000000000000001F /* ESPRuntime.mm in Sources */,
+				000000000000000000000020 /* Logger.mm in Sources */,
+				000000000000000000000021 /* ScriptManager.mm in Sources */,
+				000000000000000000000022 /* ScriptValidator.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		000000000000000008 /* Frameworks */ = {
+		000000000000000000000008 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				000000000000000023 /* Foundation.framework in Frameworks */,
-				000000000000000024 /* UIKit.framework in Frameworks */,
-				000000000000000025 /* JavaScriptCore.framework in Frameworks */,
+				000000000000000000000023 /* Foundation.framework in Frameworks */,
+				000000000000000000000024 /* UIKit.framework in Frameworks */,
+				000000000000000000000025 /* JavaScriptCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		000000000000000009 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;};
-		000000000000000026 /* Project configuration list */ = {
+		000000000000000000000009 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;};
+		000000000000000000000026 /* Project configuration list */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				000000000000000027 /* Debug */,
-				000000000000000028 /* Release */,
+				000000000000000000000027 /* Debug */,
+				000000000000000000000028 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		000000000000000006 /* Target configuration list */ = {
+		000000000000000000000006 /* Target configuration list */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				000000000000000029 /* Debug */,
-				00000000000000002A /* Release */,
+				000000000000000000000029 /* Debug */,
+				00000000000000000000002A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		000000000000000027 /* Project Debug */ = {
+		000000000000000000000027 /* Project Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; SDKROOT = iphoneos;};
 			name = Debug;
 		};
-		000000000000000028 /* Project Release */ = {
+		000000000000000000000028 /* Project Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; SDKROOT = iphoneos;};
 			name = Release;
 		};
-		000000000000000029 /* Target Debug */ = {
+		000000000000000000000029 /* Target Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "";
@@ -187,7 +187,7 @@
 			};
 			name = Debug;
 		};
-		00000000000000002A /* Target Release */ = {
+		00000000000000000000002A /* Target Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "";
