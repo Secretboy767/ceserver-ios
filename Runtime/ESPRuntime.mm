@@ -236,7 +236,7 @@
         completion(created ? nil : error);
     }
 
-    __weak typeof(self) weakSelf = self;
+    __weak ESPRuntime *weakSelf = self;
     __weak UIButton *weakButton = sender;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)),
                    dispatch_get_main_queue(), ^{
