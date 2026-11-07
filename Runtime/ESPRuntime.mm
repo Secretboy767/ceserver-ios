@@ -5,13 +5,17 @@
 #import "ScriptValidator.h"
 
 #import <JavaScriptCore/JavaScriptCore.h>
+#import <UIKit/UIKit.h>
 
 @interface ESPRuntime ()
 @property (nonatomic, strong, readwrite) ScriptManager *scriptManager;
 @property (nonatomic, strong, readwrite) JSContext *javascriptContext;
 @property (nonatomic, copy, readwrite) NSString *documentsDirectory;
 @property (nonatomic, assign, readwrite) BOOL isRunning;
+@property (nonatomic, strong) UIButton *createFolderButton;
+@property (nonatomic, copy) void (^createFolderCompletion)(NSError * _Nullable error);
 - (BOOL)prepareRuntimeWithError:(NSError **)error;
+- (void)createScriptsDirectory:(UIButton *)sender;
 @end
 
 @implementation ESPRuntime
@@ -178,6 +182,70 @@
 
 - (NSArray<NSDictionary *> *)lastExecutionLogs {
     return [[Logger sharedLogger] entries];
+}
+
+- (void)showCreateButtonInView:(UIView *)view
+                    completion:(void (^)(NSError * _Nullable error))completion {
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showCreateButtonInView:view completion:completion];
+        });
+        return;
+    }
+
+    [self.createFolderButton removeFromSuperview];
+    self.createFolderCompletion = [completion copy];
+
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.translatesAutoresizingMaskIntoConstraints = NO;
+    [button setTitle:@"create" forState:UIControlStateNormal];
+    [button setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    button.backgroundColor = UIColor.systemBlueColor;
+    button.layer.cornerRadius = 8.0;
+    [button addTarget:self
+               action:@selector(createScriptsDirectory:)
+     forControlEvents:UIControlEventTouchUpInside];
+
+    [view addSubview:button];
+    [NSLayoutConstraint activateConstraints:@[
+        [button.topAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.topAnchor constant:12.0],
+        [button.trailingAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.trailingAnchor constant:-12.0],
+        [button.widthAnchor constraintEqualToConstant:72.0],
+        [button.heightAnchor constraintEqualToConstant:36.0]
+    ]];
+    self.createFolderButton = button;
+}
+
+- (void)createScriptsDirectory:(UIButton *)sender {
+    sender.enabled = NO;
+
+    NSError *error = nil;
+    BOOL created = [[NSFileManager defaultManager] createDirectoryAtPath:self.scriptManager.baseDirectory
+                                            withIntermediateDirectories:YES
+                                                             attributes:nil
+                                                                  error:&error];
+    if (!created) {
+        NSLog(@"Unable to create scripts directory at %@: %@",
+              self.scriptManager.baseDirectory,
+              error.localizedDescription ?: @"Unknown error");
+    }
+
+    void (^completion)(NSError *) = self.createFolderCompletion;
+    self.createFolderCompletion = nil;
+    if (completion) {
+        completion(created ? nil : error);
+    }
+
+    __weak typeof(self) weakSelf = self;
+    __weak UIButton *weakButton = sender;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)),
+                   dispatch_get_main_queue(), ^{
+        UIButton *button = weakButton;
+        [button removeFromSuperview];
+        if (weakSelf.createFolderButton == button) {
+            weakSelf.createFolderButton = nil;
+        }
+    });
 }
 
 @end
