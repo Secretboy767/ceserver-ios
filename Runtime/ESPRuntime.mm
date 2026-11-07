@@ -11,6 +11,7 @@
 @property (nonatomic, strong, readwrite) JSContext *javascriptContext;
 @property (nonatomic, copy, readwrite) NSString *documentsDirectory;
 @property (nonatomic, assign, readwrite) BOOL isRunning;
+- (BOOL)prepareRuntimeWithError:(NSError **)error;
 @end
 
 @implementation ESPRuntime
@@ -29,7 +30,8 @@
     self = [super init];
     if (self) {
         _documentsDirectory = [applicationRoot copy] ?: [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
-        _scriptManager = [[ScriptManager alloc] initWithBaseDirectory:_documentsDirectory];
+        NSString *scriptsDirectory = [_documentsDirectory stringByAppendingPathComponent:@"Scripts"];
+        _scriptManager = [[ScriptManager alloc] initWithBaseDirectory:scriptsDirectory];
         _isRunning = NO;
     }
     return self;
@@ -40,14 +42,19 @@
         return YES;
     }
 
-    NSError *localError = nil;
-    if (![self.scriptManager loadConfiguration:&localError]) {
-        if (error) {
-            *error = localError;
-        }
+    if (![self prepareRuntimeWithError:error]) {
         return NO;
     }
 
+    return [self executeScripts:@[] error:error];
+}
+
+- (BOOL)prepareRuntimeWithError:(NSError **)error {
+    if (self.isRunning) {
+        return YES;
+    }
+
+    NSError *localError = nil;
     if (![self.scriptManager reloadScriptsWithError:&localError]) {
         if (error) {
             *error = localError;
@@ -73,41 +80,18 @@
 }
 
 - (BOOL)reloadWithError:(NSError **)error {
-    NSError *localError = nil;
+    self.isRunning = NO;
     self.javascriptContext = nil;
-    if (![self.scriptManager reloadScriptsWithError:&localError]) {
-        if (error) {
-            *error = localError;
-        }
+    if (![self prepareRuntimeWithError:error]) {
         return NO;
     }
 
-    self.javascriptContext = [[JSContext alloc] init];
-    self.javascriptContext.exceptionHandler = ^(JSContext *context, JSValue *exception) {
-        NSString *message = exception ? exception.toString : @"Unknown JavaScript exception";
-        [[Logger sharedLogger] logScriptEventWithFilename:@"javascript_exception"
-                                                timestamp:[NSDate date]
-                                                duration:0.0
-                                                 success:NO
-                                                message:@"JavaScript exception"
-                                          exceptionInfo:message
-                                             integrity:@"unchecked"
-                                         sourceContext:@"JSContext.exceptionHandler"];
-    };
-
-    self.isRunning = YES;
-    return YES;
+    return [self executeScripts:@[] error:error];
 }
 
 - (BOOL)executeScripts:(NSArray<NSString *> *)scripts error:(NSError **)error {
-    if (!self.isRunning) {
-        NSError *startError = nil;
-        if (![self startWithError:&startError]) {
-            if (error) {
-                *error = startError;
-            }
-            return NO;
-        }
+    if (![self prepareRuntimeWithError:error]) {
+        return NO;
     }
 
     NSArray<NSString *> *scriptsToExecute = scripts.count > 0 ? scripts : self.scriptManager.scriptFiles;
@@ -116,7 +100,27 @@
     }
 
     for (NSString *scriptName in scriptsToExecute) {
-        NSString *fullPath = [self.documentsDirectory stringByAppendingPathComponent:scriptName];
+        if (![self.scriptManager.scriptFiles containsObject:scriptName]) {
+            if (error) {
+                *error = [NSError errorWithDomain:@"ESP.Runtime" code:301 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Script was not discovered in the Scripts directory: %@", scriptName]}];
+            }
+            return NO;
+        }
+
+        NSString *fullPath = [self.scriptManager.baseDirectory stringByAppendingPathComponent:scriptName];
+        NSNumber *maxFileSize = self.scriptManager.configuration[@"maxFileSizeBytes"] ?: @1048576;
+        NSError *validationError = nil;
+        if (![ScriptValidator validateScriptAtPath:fullPath
+                                      baseDirectory:self.scriptManager.baseDirectory
+                                       maxFileSize:maxFileSize.unsignedIntegerValue
+                                         allowlist:@[]
+                                             error:&validationError]) {
+            if (error) {
+                *error = validationError;
+            }
+            return NO;
+        }
+
         NSError *readError = nil;
         NSString *scriptSource = [self.scriptManager contentOfScriptAtPath:fullPath error:&readError];
         if (scriptSource == nil) {

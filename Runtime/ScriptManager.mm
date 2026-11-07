@@ -58,6 +58,17 @@
 }
 
 - (BOOL)reloadScriptsWithError:(NSError **)error {
+    NSError *directoryError = nil;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:self.baseDirectory
+                                   withIntermediateDirectories:YES
+                                                    attributes:nil
+                                                         error:&directoryError]) {
+        if (error) {
+            *error = directoryError;
+        }
+        return NO;
+    }
+
     NSError *localError = nil;
     if (![self loadConfiguration:&localError]) {
         if (error) {
@@ -74,11 +85,6 @@
         return NO;
     }
 
-    NSArray *allowlist = self.configuration[@"allowedScripts"];
-    if (![allowlist isKindOfClass:[NSArray class]]) {
-        allowlist = @[];
-    }
-
     NSNumber *maxFileSize = self.configuration[@"maxFileSizeBytes"] ?: @1048576;
     NSMutableArray<NSString *> *validatedScripts = [NSMutableArray array];
 
@@ -88,7 +94,7 @@
         if (![ScriptValidator validateScriptAtPath:fullPath
                                       baseDirectory:self.baseDirectory
                                        maxFileSize:[maxFileSize unsignedIntegerValue]
-                                         allowlist:allowlist
+                                         allowlist:@[]
                                              error:&validationError]) {
             if (error) {
                 *error = validationError;
@@ -117,11 +123,6 @@
         return @[];
     }
 
-    NSArray *allowlist = self.configuration[@"allowedScripts"];
-    if (![allowlist isKindOfClass:[NSArray class]]) {
-        allowlist = @[];
-    }
-
     NSMutableArray<NSString *> *scriptNames = [NSMutableArray array];
     for (NSString *entry in directoryEntries) {
         if (![entry hasSuffix:@".js"]) {
@@ -135,9 +136,13 @@
         }
 
         NSError *validationError = nil;
-        if ([ScriptValidator isAllowedScript:entry allowlist:allowlist error:&validationError]) {
-            [scriptNames addObject:entry];
+        if (![ScriptValidator isAllowedScript:entry allowlist:@[] error:&validationError]) {
+            if (error) {
+                *error = validationError;
+            }
+            return @[];
         }
+        [scriptNames addObject:entry];
     }
 
     return [scriptNames sortedArrayUsingSelector:@selector(compare:)];
