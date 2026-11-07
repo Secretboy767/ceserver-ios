@@ -1,0 +1,28 @@
+name: Build iOS runtime dylib
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Build arm64 iOS dylib
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+          make
+          file build/libESPRuntime.dylib
+
+      - name: Upload dylib artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ESPRuntime-ios-arm64
+          path: build/libESPRuntime.dylib
+          if-no-files-found: error

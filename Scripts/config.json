@@ -1,0 +1,15 @@
+{
+  "allowedScripts": [
+    "esp.js",
+    "matrix.js"
+  ],
+  "requiredScripts": [
+    "esp.js"
+  ],
+  "maxFileSizeBytes": 1048576,
+  "metadata": {
+    "runtimeName": "ESP Native Runtime",
+    "version": "1.0.0",
+    "owner": "Application-owned execution context"
+  }
+}
