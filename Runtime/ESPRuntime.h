@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedRuntime;
 - (instancetype)initWithApplicationRoot:(NSString *)applicationRoot NS_DESIGNATED_INITIALIZER;
-// Creates Documents/Scripts under the application root and executes its discovered JavaScript files.
+// Creates Documents/scripts under the application root and executes its discovered JavaScript files.
 - (BOOL)startWithError:(NSError **)error;
 - (BOOL)reloadWithError:(NSError **)error;
 - (BOOL)executeScripts:(NSArray<NSString *> *)scripts error:(NSError **)error;

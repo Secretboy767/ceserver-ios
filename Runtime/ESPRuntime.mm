@@ -47,7 +47,7 @@
     self = [super init];
     if (self) {
         _documentsDirectory = [applicationRoot copy] ?: [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
-        NSString *scriptsDirectory = [_documentsDirectory stringByAppendingPathComponent:@"Scripts"];
+        NSString *scriptsDirectory = [_documentsDirectory stringByAppendingPathComponent:@"scripts"];
         _scriptManager = [[ScriptManager alloc] initWithBaseDirectory:scriptsDirectory];
         _isRunning = NO;
     }
@@ -119,7 +119,7 @@
     for (NSString *scriptName in scriptsToExecute) {
         if (![self.scriptManager.scriptFiles containsObject:scriptName]) {
             if (error) {
-                *error = [NSError errorWithDomain:@"ESP.Runtime" code:301 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Script was not discovered in the Scripts directory: %@", scriptName]}];
+                *error = [NSError errorWithDomain:@"ESP.Runtime" code:301 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Script was not discovered in the scripts directory: %@", scriptName]}];
             }
             return NO;
         }
@@ -303,14 +303,28 @@
     sender.enabled = NO;
 
     NSError *error = nil;
-    BOOL created = [[NSFileManager defaultManager] createDirectoryAtPath:self.scriptManager.baseDirectory
-                                            withIntermediateDirectories:YES
-                                                             attributes:nil
-                                                                  error:&error];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *scriptsDirectory = self.scriptManager.baseDirectory;
+    BOOL created = [fileManager createDirectoryAtPath:scriptsDirectory
+                          withIntermediateDirectories:YES
+                                           attributes:nil
+                                                error:&error];
+    BOOL isDirectory = NO;
+    BOOL exists = [fileManager fileExistsAtPath:scriptsDirectory isDirectory:&isDirectory];
+    created = created || (exists && isDirectory);
+
     if (!created) {
+        if (error == nil) {
+            error = [NSError errorWithDomain:NSCocoaErrorDomain
+                                        code:NSFileWriteUnknownError
+                                    userInfo:@{NSLocalizedDescriptionKey: @"The scripts folder could not be created."}];
+        }
         NSLog(@"Unable to create scripts directory at %@: %@",
-              self.scriptManager.baseDirectory,
-              error.localizedDescription ?: @"Unknown error");
+              scriptsDirectory,
+              error.localizedDescription);
+        [sender setTitle:@"Failed" forState:UIControlStateNormal];
+    } else {
+        [sender setTitle:@"Created" forState:UIControlStateNormal];
     }
 
     void (^completion)(NSError *) = self.createFolderCompletion;
