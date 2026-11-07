@@ -33,6 +33,7 @@ jobs:
           /usr/libexec/PlistBuddy -c 'Print :UIFileSharingEnabled' build/DerivedData/Build/Products/Debug-iphonesimulator/RuntimeHost.app/Info.plist
           /usr/libexec/PlistBuddy -c 'Print :LSSupportsOpeningDocumentsInPlace' build/DerivedData/Build/Products/Debug-iphonesimulator/RuntimeHost.app/Info.plist
           file build/DerivedData/Build/Products/Debug-iphonesimulator/RuntimeHost.app/RuntimeHost
+          ditto -c -k --sequesterRsrc --keepParent build/DerivedData/Build/Products/Debug-iphonesimulator/RuntimeHost.app build/RuntimeHost-ios-simulator.zip
 
       - name: Upload dylib artifact
         uses: actions/upload-artifact@v4
@@ -45,5 +46,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: RuntimeHost-ios-simulator
-          path: build/DerivedData/Build/Products/Debug-iphonesimulator/RuntimeHost.app
+          path: build/RuntimeHost-ios-simulator.zip
           if-no-files-found: error
