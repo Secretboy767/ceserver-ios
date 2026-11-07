@@ -198,9 +198,9 @@
 }
 
 - (void)installCreateButton {
-    __weak typeof(self) weakSelf = self;
+    __weak ESPRuntime *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        ESPRuntime *strongSelf = weakSelf;
         if (!strongSelf) {
             return;
         }
