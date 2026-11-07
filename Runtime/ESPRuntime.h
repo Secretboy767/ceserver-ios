@@ -5,6 +5,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class ScriptManager;
 @class UIView;
+@class UIViewController;
 
 @interface ESPRuntime : NSObject
 
@@ -19,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)startWithError:(NSError **)error;
 - (BOOL)reloadWithError:(NSError **)error;
 - (BOOL)executeScripts:(NSArray<NSString *> *)scripts error:(NSError **)error;
+- (void)showCreateButtonInViewController:(UIViewController *)viewController
+                              completion:(void (^)(NSError * _Nullable error))completion;
 - (void)showCreateButtonInView:(UIView *)view
                     completion:(void (^)(NSError * _Nullable error))completion;
 - (NSArray<NSDictionary *> *)lastExecutionLogs;
